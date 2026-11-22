@@ -1,0 +1,11 @@
+flowchart TD
+    A["ISSUE_CARBON generator month tonnes"] --> B["credits = floor of tonnes"]
+    B --> C["buffer = floor of 5 percent of credits"]
+    C --> D["Generator lot gets credits minus buffer"]
+    C --> E["Issuance buffer_held = buffer (buffer pool)"]
+    D --> F["release_buffers for this generator"]
+    E --> F
+    F --> G{"For each carbon issuance i: issuances i, i+1, i+2 exist and none reversed?"}
+    G -- yes --> H["Move buffer_held of issuance i into generator lot"]
+    G -- no --> I["Buffer stays in pool"]
+    J["Reversal of an issuance"] -. blocks release .-> G

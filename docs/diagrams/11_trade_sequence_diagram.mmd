@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant P as parser.py
+    participant O as orders.py
+    participant A as accounts.py
+    participant R as registry.py
+    participant U as auction.py
+    P->>O: BUY / SELL place_order
+    O->>R: free_holdings (sell orders)
+    O->>A: block_margin (buy orders)
+    O-->>P: order open or rejected
+    P->>U: SESSION_CLOSE close_session
+    U->>U: clear_market per category
+    U->>R: transfer_fifo seller to buyer
+    U->>A: convert_margin and add_settlement
+    P->>A: SETTLE date (T+1)
+    A->>A: debit fees first
+    A->>A: credit seller proceeds, then collect dues

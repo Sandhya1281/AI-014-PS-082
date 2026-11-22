@@ -1,0 +1,16 @@
+flowchart TD
+    A["RETIRE entity category qty date against"] --> B{"Non-solar certificate against solar target?"}
+    B -- yes --> R1["Rejected BR-03"]
+    B -- no --> C{"Solar certificate against non-solar target?"}
+    C -- yes --> D{"Solar retired against solar target at least solar target?"}
+    D -- no --> R2["Rejected BR-03"]
+    D -- yes --> E
+    C -- no --> E{"qty within free unexpired holdings?"}
+    E -- no --> R3["Rejected"]
+    E -- yes --> F["Remove certificates FIFO and record retirement with fiscal year"]
+    F --> G["CLOSE_YEAR fy"]
+    G --> H["target = ceil of consumption x RPO, plus carry-in"]
+    H --> I["shortfall = target minus retired toward that target"]
+    I --> J{"shortfall above 0, retired at least 90 percent of target, carry-forward not yet used?"}
+    J -- yes --> K["Carry shortfall to next year, no penalty"]
+    J -- no --> L["Penalty = shortfall x 3000"]

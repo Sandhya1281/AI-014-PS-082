@@ -1,0 +1,14 @@
+flowchart TD
+    A["REVERSE issuance"] --> B{"Exists and not already reversed?"}
+    B -- no --> X["Error"]
+    B -- yes --> C["Step 1: cancel generator's untraded units of that vintage and category"]
+    C --> D{"Carbon issuance?"}
+    D -- yes --> E["Step 2: use buffer pool credits, own buffer first"]
+    D -- no --> F["No buffer for RECs"]
+    E --> G{"Deficit remaining?"}
+    F --> G
+    G -- no --> H["Done, nothing owed"]
+    G -- yes --> I{"Last clearing price exists?"}
+    I -- yes --> J["Step 3: generator owes deficit x last clearing price"]
+    I -- no --> K["Record unpriced deficit units"]
+    C -.-> L["Retired or sold units are never clawed back"]

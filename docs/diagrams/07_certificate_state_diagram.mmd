@@ -1,0 +1,12 @@
+stateDiagram-v2
+    [*] --> Held : REC issued or bought
+    Held --> Listed : sell order open (units counted as encumbered)
+    Listed --> Held : order cancelled or unfilled
+    Listed --> Transferred : order filled, FIFO transfer
+    Transferred --> Held : buyer now holds the units
+    Held --> Retired : RETIRE against RPO target
+    Held --> Expired : after expiry day (36 months after vintage month end)
+    Retired --> [*]
+    Expired --> [*]
+    Held --> Cancelled : issuance reversed, untraded units cancelled
+    Cancelled --> [*]

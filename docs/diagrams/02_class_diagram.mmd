@@ -1,0 +1,96 @@
+classDiagram
+    %% Records are plain Python dicts; shown as classes to document their fields.
+    class Generator {
+        id
+        technology
+        capacity_mw
+        accredited_on
+        audited
+    }
+    class Entity {
+        id
+        consumption_mwh
+        rpo_percent
+        carry_forward_used
+    }
+    class Issuance {
+        id
+        kind REC or CARBON
+        generator
+        month
+        qty
+        to_generator
+        buffer_held
+        reversed
+    }
+    class Lot {
+        id
+        owner
+        category
+        vintage
+        qty
+    }
+    class Account {
+        cash
+        blocked
+        fee_due
+        reversal_owed
+        unpriced_units
+    }
+    class Session {
+        id
+        date
+        status
+        results
+    }
+    class Order {
+        id
+        session
+        member
+        side
+        category
+        qty
+        price
+        seq
+        status
+        margin
+        filled
+        reason
+    }
+    class Settlement {
+        id
+        order
+        member
+        side
+        qty
+        price
+        value
+        settle_date
+        settled
+        fees
+    }
+    class Retirement {
+        entity
+        category
+        against
+        qty
+        date
+        fy
+    }
+    class ComplianceResult {
+        entity
+        fy
+        solar
+        nonsolar
+        carry_out
+        penalty
+    }
+    Generator "1" --> "*" Issuance : issued for
+    Issuance "1" --> "*" Lot : creates
+    Generator "1" --> "0..1" Account : member id
+    Entity "1" --> "0..1" Account : member id
+    Account "1" --> "*" Lot : owns
+    Session "1" --> "*" Order : contains
+    Order "1" --> "0..1" Settlement : fill
+    Entity "1" --> "*" Retirement : retires
+    Entity "1" --> "*" ComplianceResult : assessed

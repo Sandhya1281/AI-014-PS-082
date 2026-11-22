@@ -1,0 +1,8 @@
+flowchart TD
+    A["transfer_fifo seller buyer category qty trade_date"] --> B["List seller lots of category that are not expired on trade_date"]
+    B --> C{"Total units at least qty?"}
+    C -- no --> X["Error: seller does not hold qty unexpired certificates"]
+    C -- yes --> D["Sort lots by vintage ascending, then lot id"]
+    D --> E["Take from oldest lot until qty is met"]
+    E --> F["Remove empty lots"]
+    F --> G["Add same vintage and quantity to buyer lots (merge if lot exists)"]

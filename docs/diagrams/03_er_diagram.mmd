@@ -1,0 +1,86 @@
+erDiagram
+    GENERATOR ||--o{ ISSUANCE : has
+    ISSUANCE ||--o{ LOT : creates
+    MEMBER ||--o{ LOT : owns
+    MEMBER ||--|| ACCOUNT : has
+    ENTITY ||--o{ RETIREMENT : makes
+    ENTITY ||--o{ COMPLIANCE_RESULT : receives
+    SESSION ||--o{ ORDER : contains
+    MEMBER ||--o{ ORDER : places
+    ORDER ||--o| SETTLEMENT : produces
+    ISSUANCE ||--o| REVERSAL : may_have
+    GENERATOR {
+        string id PK
+        string technology
+        decimal capacity_mw
+        date accredited_on
+        bool audited
+    }
+    ENTITY {
+        string id PK
+        decimal consumption_mwh
+        bool carry_forward_used
+    }
+    ISSUANCE {
+        string id PK
+        string kind
+        string generator FK
+        string month
+        int qty
+        int buffer_held
+        bool reversed
+    }
+    LOT {
+        int id PK
+        string owner FK
+        string category
+        string vintage
+        int qty
+    }
+    ACCOUNT {
+        string member PK
+        decimal cash
+        decimal blocked
+        decimal fee_due
+    }
+    SESSION {
+        string id PK
+        date date
+        string status
+    }
+    ORDER {
+        string id PK
+        string session FK
+        string member FK
+        string side
+        string category
+        int qty
+        decimal price
+        string status
+    }
+    SETTLEMENT {
+        int id PK
+        string order FK
+        date settle_date
+        decimal value
+        bool settled
+    }
+    RETIREMENT {
+        string entity FK
+        string category
+        string against
+        int qty
+        int fy
+    }
+    COMPLIANCE_RESULT {
+        string entity FK
+        int fy
+        decimal penalty
+    }
+    REVERSAL {
+        string issuance FK
+        int cancelled_untraded
+        int buffer_used
+        int deficit_units
+        decimal amount_owed
+    }

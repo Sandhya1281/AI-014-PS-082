@@ -1,0 +1,16 @@
+flowchart TD
+    A["SESSION_CLOSE"] --> B["For each market: solar, then nonsolar"]
+    B --> C["Collect open orders, split buys and sells"]
+    C --> D["Sort buys price descending, sells price ascending, ties by entry sequence"]
+    D --> E["For every order price p: demand = buys at or above p, supply = sells at or below p, volume = min"]
+    E --> F{"Any volume above 0?"}
+    F -- no --> N["No trade: all orders unfilled, margins released"]
+    F -- yes --> G["Clearing price = lowest p with the largest volume"]
+    G --> H{"Price above forbearance 3000?"}
+    H -- yes --> FB["Price = 3000, sells at or below 3000 clear, buys pro-rated"]
+    H -- no --> I["Fill price levels in order; marginal level shared pro-rata, rounded down"]
+    I --> J["Trim the larger side so buy fills equal sell fills"]
+    FB --> K
+    J --> K["Pair buys with sells, FIFO transfer of certificates"]
+    K --> L["Buyers: margin converted to settlement, unfilled margin released"]
+    L --> M["Create settlement records, settle date = trade date + 1"]

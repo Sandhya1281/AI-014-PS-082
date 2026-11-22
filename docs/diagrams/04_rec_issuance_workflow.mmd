@@ -1,0 +1,13 @@
+flowchart TD
+    A["ISSUE_REC generator month mwh applied"] --> B{"Generator registered?"}
+    B -- no --> X["Error: unknown generator"]
+    B -- yes --> C["units = floor of MWh"]
+    C --> D{"applied date after end of month + 6 months?"}
+    D -- yes --> L["LAPSED - no units issued"]
+    D -- no --> E{"accredited under 365 days and audit flag not set?"}
+    E -- yes --> AU["AUDIT_REQUIRED - nothing issued"]
+    E -- no --> F{"units = 0?"}
+    F -- yes --> Z["ZERO_UNITS"]
+    F -- no --> G["Create issuance record kind REC"]
+    G --> H["add_lot: category from technology, vintage = generation month"]
+    H --> I["ISSUED"]

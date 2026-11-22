@@ -1,0 +1,36 @@
+flowchart TD
+    CF["Command file"] --> MAIN["main.py"]
+    MAIN --> PARSER["parser.py (shared)"]
+    PARSER --> REP["reports.py (shared)"]
+    subgraph M1["Member 1 - Registry and Compliance"]
+        REG["registry.py"]
+        CARB["carbon.py"]
+        COMP["compliance.py"]
+    end
+    subgraph M2["Member 2 - Trading and Finance"]
+        ORD["orders.py"]
+        AUC["auction.py"]
+        ACC["accounts.py"]
+    end
+    PARSER --> REG
+    PARSER --> CARB
+    PARSER --> COMP
+    PARSER --> ORD
+    PARSER --> AUC
+    PARSER --> ACC
+    CARB --> REG
+    CARB --> ACC
+    COMP --> REG
+    ORD --> REG
+    ORD --> ACC
+    AUC --> REG
+    AUC --> ACC
+    STATE[("state dict - state.py")]
+    CFG["config.py constants"]
+    REG --- STATE
+    ACC --- STATE
+    ORD --- STATE
+    AUC --- STATE
+    CARB --- STATE
+    COMP --- STATE
+    REP --> OUT["Printed output"]
